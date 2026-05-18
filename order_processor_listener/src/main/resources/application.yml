@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ms_processmanager?useSSL=false&serverTimezone=UTC
+    username: root
+    password: 12102021
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  rabbitmq:
+    addresses: amqps://tgzzbhos:icZj8c-O8oSGqDkBGx-l0AueQ-WHt3qp@capybara.lmq.cloudamqp.com/tgzzbhos
+    connection-timeout: 5000
+    
+broker:
+  queue:
+    processmanager:
+      name: exchange.processmanager
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
