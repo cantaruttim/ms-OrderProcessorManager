@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.cantarutti.ms_order_processor.dto.OrderDTO;
 import br.com.cantarutti.ms_order_processor.model.Order;
 import br.com.cantarutti.ms_order_processor.service.OrderService;
 
@@ -34,6 +35,22 @@ public class OrderController {
         rabbitTemplate.convertAndSend("", routingKey, orderSaved.getDescription());
         return "Order created successfully!" + order.getDescription();
     }
+
+    @PostMapping("/v2")
+    public String createOrderDTO(@RequestBody Order order) {
+    Order orderSaved = orderService.saveOrder(order);
+    
+    // Criar DTO com os dados completos
+    OrderDTO orderDTO = new OrderDTO(
+        orderSaved.getId(),
+        orderSaved.getDescription()
+    );
+    
+    // Enviar o DTO completo (não apenas a description)
+    rabbitTemplate.convertAndSend("", routingKey, orderDTO);
+    
+    return "Order created successfully! " + orderSaved.getDescription();
+}
 
     @GetMapping
     public List<Order> getAllOrders() {
