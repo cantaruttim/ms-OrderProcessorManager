@@ -2,10 +2,14 @@ package br.com.cantarutti.order_processor_listener.model;
 
 import java.util.UUID;
 
+import org.aspectj.weaver.ast.Or;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "tb_orders")
 public class Order {
 
     @Id
@@ -14,6 +18,8 @@ public class Order {
     private String product;
     private int quantity;
     private double price;
+
+    public Order() {}
     
     public Order(UUID id, String description, String product, int quantity, double price) {
         this.id = id;

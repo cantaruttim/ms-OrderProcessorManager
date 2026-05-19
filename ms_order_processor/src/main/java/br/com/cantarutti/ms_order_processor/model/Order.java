@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "tb_orders")
 public class Order {
 
     @Id
