@@ -1,8 +1,8 @@
-package br.com.cantarutti.ms_order_processor.records;
+package br.com.cantarutti.order_processor_listener.records;
 
 import java.util.UUID;
 
-import br.com.cantarutti.ms_order_processor.model.Order;
+import br.com.cantarutti.order_processor_listener.model.Order;
 
 public record OrderRecord(
     UUID id,
@@ -11,7 +11,7 @@ public record OrderRecord(
     double price,
     String description
 ) {
-     public static OrderRecord fromOrder(Order order) {
+    public static OrderRecord fromOrder(Order order) {
         return new OrderRecord(
             order.getId(),
             order.getProduct(),
@@ -22,6 +22,12 @@ public record OrderRecord(
     }
 
     public Order toOrder() {
-        return new Order(id, product, quantity, price, description);
+        return new Order(
+            this.id,
+            this.description,
+            this.product,
+            this.quantity,
+            this.price
+        );
     }
 }

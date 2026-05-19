@@ -14,9 +14,6 @@ public class Order {
     private String product;
     private int quantity;
     private double price;
-
-    // Construtores
-    public Order() {}
     
     public Order(UUID id, String description, String product, int quantity, double price) {
         this.id = id;

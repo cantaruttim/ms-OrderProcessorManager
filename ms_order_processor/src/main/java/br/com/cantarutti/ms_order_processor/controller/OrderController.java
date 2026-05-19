@@ -31,21 +31,12 @@ public class OrderController {
 
     @PostMapping("/v2")
     public String createOrder(@RequestBody Order order) {
-    Order orderSaved = orderService.saveOrder(order);
-    
-    OrderRecord orderRecord = new OrderRecord(
-        orderSaved.getId(),
-        orderSaved.getProduct(),
-        orderSaved.getQuantity(),
-        orderSaved.getPrice(),
-        orderSaved.getDescription(),
-        orderSaved.getItems()
-    );
-    
-    rabbitTemplate.convertAndSend("", routingKey, orderRecord);
+        Order orderSaved = orderService.saveOrder(order);
+        
+        rabbitTemplate.convertAndSend("", routingKey, OrderRecord.fromOrder(orderSaved));
 
-    return "Order created and sent to RabbitMQ successfully!" + orderSaved;
-}
+        return "Order created and sent to RabbitMQ successfully!" + orderSaved;
+    }
 
     @GetMapping
     public List<Order> getAllOrders() {

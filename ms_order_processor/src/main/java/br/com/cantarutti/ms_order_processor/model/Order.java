@@ -30,6 +30,14 @@ public class Order {
     @JsonManagedReference
     private List<OrderItem> items;
 
+    public Order(UUID id, String product, int quantity, double price, String description) {
+        this.id = id;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+        this.description = description;
+    }
+
     public UUID getId() {
         return id;
     }

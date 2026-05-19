@@ -4,8 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.handler.annotation.Payload;
 
-import br.com.cantarutti.order_processor_listener.dto.OrderDTO;
 import br.com.cantarutti.order_processor_listener.model.Order;
+import br.com.cantarutti.order_processor_listener.records.OrderRecord;
 import br.com.cantarutti.order_processor_listener.repository.OrderRepository;
 
 import org.springframework.amqp.core.Queue;
@@ -35,18 +35,11 @@ public class RabbitMQConfig {
     }
 
     @RabbitListener(queues = "${broker.queue.processmanager.name}")
-    public void listenerProcessQueue(@Payload OrderDTO orderDTO) {
-        System.out.println("Received OrderDTO: " + orderDTO);
+    public void listenerProcessQueue(@Payload OrderRecord orderRecord) {
+        System.out.println("Received OrderRecord: " + orderRecord);
         
-        // Converter DTO para Entity
-        Order order = new Order();
-        order.setId(orderDTO.getId());
-        order.setDescription(orderDTO.getDescription());
-        
-        // Salvar no banco de dados
-        orderRepository.save(order);
-        
-        System.out.println("Order saved successfully! ID: " + order.getId());
+        orderRepository.save(orderRecord.toOrder());        
+        System.out.println("Order saved successfully! ID: " + orderRecord.id());
     }
 
     
