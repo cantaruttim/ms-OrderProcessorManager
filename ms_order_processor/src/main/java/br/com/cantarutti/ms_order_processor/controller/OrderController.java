@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.cantarutti.ms_order_processor.model.Order;
-import br.com.cantarutti.ms_order_processor.records.OrderDTO;
 import br.com.cantarutti.ms_order_processor.records.OrderRecord;
 import br.com.cantarutti.ms_order_processor.service.OrderService;
 
