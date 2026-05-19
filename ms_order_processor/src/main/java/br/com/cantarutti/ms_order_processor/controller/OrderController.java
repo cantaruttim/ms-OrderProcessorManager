@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.cantarutti.ms_order_processor.dto.OrderDTO;
 import br.com.cantarutti.ms_order_processor.model.Order;
+import br.com.cantarutti.ms_order_processor.records.OrderDTO;
+import br.com.cantarutti.ms_order_processor.records.OrderRecord;
 import br.com.cantarutti.ms_order_processor.service.OrderService;
 
 @RestController
@@ -29,27 +30,22 @@ public class OrderController {
     @Value("${broker.queue.processmanager.name}")
     private String routingKey;
 
-    @PostMapping
-    public String createOrder(@RequestBody Order order) {
-        Order orderSaved = orderService.saveOrder(order);
-        rabbitTemplate.convertAndSend("", routingKey, orderSaved.getDescription());
-        return "Order created successfully!" + order.getDescription();
-    }
-
     @PostMapping("/v2")
-    public String createOrderDTO(@RequestBody Order order) {
+    public String createOrder(@RequestBody Order order) {
     Order orderSaved = orderService.saveOrder(order);
     
-    // Criar DTO com os dados completos
-    OrderDTO orderDTO = new OrderDTO(
+    OrderRecord orderRecord = new OrderRecord(
         orderSaved.getId(),
-        orderSaved.getDescription()
+        orderSaved.getProduct(),
+        orderSaved.getQuantity(),
+        orderSaved.getPrice(),
+        orderSaved.getDescription(),
+        orderSaved.getItems()
     );
     
-    // Enviar o DTO completo (não apenas a description)
-    rabbitTemplate.convertAndSend("", routingKey, orderDTO);
-    
-    return "Order created successfully! " + orderSaved.getDescription();
+    rabbitTemplate.convertAndSend("", routingKey, orderRecord);
+
+    return "Order created and sent to RabbitMQ successfully!" + orderSaved;
 }
 
     @GetMapping
